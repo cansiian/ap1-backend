@@ -8,7 +8,7 @@ O objetivo da aplicação é disponibilizar um CRUD simples para **consulta, cad
 
 # Link do Video
 
-adicionar depois aki
+https://drive.google.com/file/d/1VlkuHsi0UWj_k_LaQ3wICZZgfD7D88ub/view?usp=sharing
 
 ---
 
