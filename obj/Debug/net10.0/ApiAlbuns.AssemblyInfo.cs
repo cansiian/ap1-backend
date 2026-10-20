@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ApiAlbuns")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1e3a2d2f710b00085e9fa8e3837a873f1a8e49ac")]
 [assembly: System.Reflection.AssemblyProductAttribute("ApiAlbuns")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ApiAlbuns")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,79 +1,88 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("Padrao")));
+
 var app = builder.Build();
 
-var albuns = new List<AlbumDto>
-{
-    new AlbumDto(1, "OK Computer", 1997, 12),
-    new AlbumDto(2, "Kid A", 2000, 10),
-    new AlbumDto(3, "In Rainbows", 2007, 10),
-};
 
-app.MapGet("/", () => Results.Ok(new 
-{ 
-    mensagem = "API de Álbuns do Radiohead no ar!", 
-    status = "Online" 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+
+app.MapGet("/api", () => Results.Ok(new
+{
+    mensagem = "API de Álbuns do Radiohead no ar!",
+    status = "Online"
 }));
 
 // listar
-app.MapGet("/api/albuns", () =>
+app.MapGet("/api/albuns", async (AppDbContext db) =>
 {
-    return Results.Ok(albuns);
+    return Results.Ok(await db.Albuns.ToListAsync());
 });
 
-// busca por id
-app.MapGet("/api/albuns/{id:int}", (int id) =>
+// buscar por id
+app.MapGet("/api/albuns/{id:int}", async (int id, AppDbContext db) =>
 {
-    var album = albuns.FirstOrDefault(a => a.Id == id);
-    if (album is null)
-    {
-        return Results.NotFound(new { mensagem = $"Álbum com ID {id} não encontrado." });
-    }
+    var album = await db.Albuns.FindAsync(id);
 
-    return Results.Ok(album);
+    return album is null
+        ? Results.NotFound(new { mensagem = $"Álbum com ID {id} não encontrado." })
+        : Results.Ok(album);
 });
 
 // cadastrar
-app.MapPost("/api/albuns", (AlbumEntradaDto dados) =>
+app.MapPost("/api/albuns", async (AlbumEntradaDto dados, AppDbContext db) =>
 {
-    int proximoId = albuns.Count > 0 ? albuns.Max(a => a.Id) + 1 : 1;
-    var novoAlbum = new AlbumDto(proximoId, dados.Titulo, dados.AnoLancamento, dados.NumeroFaixas);
+    var novoAlbum = new Album
+    {
+        Titulo = dados.Titulo,
+        AnoLancamento = dados.AnoLancamento,
+        NumeroFaixas = dados.NumeroFaixas
+    };
 
-    albuns.Add(novoAlbum);
+    db.Albuns.Add(novoAlbum);
+    await db.SaveChangesAsync();
 
     return Results.Created($"/api/albuns/{novoAlbum.Id}", novoAlbum);
 });
 
 // atualizar
-app.MapPut("/api/albuns/{id:int}", (int id, AlbumEntradaDto dados) =>
+app.MapPut("/api/albuns/{id:int}", async (int id, AlbumEntradaDto dados, AppDbContext db) =>
 {
-    int indice = albuns.FindIndex(albumDaLista => albumDaLista.Id == id);
-    if (indice == -1)
+    var album = await db.Albuns.FindAsync(id);
+    if (album is null)
     {
         return Results.NotFound(new { mensagem = $"Álbum com ID {id} não encontrado." });
     }
 
-    var albumAtualizado = new AlbumDto(id, dados.Titulo, dados.AnoLancamento, dados.NumeroFaixas);
-    
-    albuns[indice] = albumAtualizado;
+    album.Titulo = dados.Titulo;
+    album.AnoLancamento = dados.AnoLancamento;
+    album.NumeroFaixas = dados.NumeroFaixas;
 
-    return Results.Ok(albumAtualizado);
+    await db.SaveChangesAsync();
+
+    return Results.Ok(album);
 });
 
 // remover
-app.MapDelete("/api/albuns/{id:int}", (int id) =>
+app.MapDelete("/api/albuns/{id:int}", async (int id, AppDbContext db) =>
 {
-    int indice = albuns.FindIndex(albumDaLista => albumDaLista.Id == id);
-    if (indice == -1)
+    var album = await db.Albuns.FindAsync(id);
+    if (album is null)
     {
         return Results.NotFound(new { mensagem = $"Álbum com ID {id} não encontrado." });
     }
 
-    albuns.RemoveAt(indice);
-    
+    db.Albuns.Remove(album);
+    await db.SaveChangesAsync();
+
     return Results.NoContent();
 });
 
 app.Run();
 
-record AlbumDto(int Id, string Titulo, int AnoLancamento, int NumeroFaixas);
 record AlbumEntradaDto(string Titulo, int AnoLancamento, int NumeroFaixas);

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\final\\ApiAlbuns\\ApiAlbuns.csproj": {}
+    "C:\\aula\\apibackend\\ap1-backend\\ApiAlbuns.csproj": {}
   },
   "projects": {
-    "C:\\Users\\final\\ApiAlbuns\\ApiAlbuns.csproj": {
+    "C:\\aula\\apibackend\\ap1-backend\\ApiAlbuns.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\final\\ApiAlbuns\\ApiAlbuns.csproj",
+        "projectUniqueName": "C:\\aula\\apibackend\\ap1-backend\\ApiAlbuns.csproj",
         "projectName": "ApiAlbuns",
-        "projectPath": "C:\\Users\\final\\ApiAlbuns\\ApiAlbuns.csproj",
+        "projectPath": "C:\\aula\\apibackend\\ap1-backend\\ApiAlbuns.csproj",
         "packagesPath": "C:\\Users\\final\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\final\\ApiAlbuns\\obj\\",
+        "outputPath": "C:\\aula\\apibackend\\ap1-backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\final\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -45,6 +45,18 @@
         "net10.0": {
           "framework": "net10.0",
           "targetAlias": "net10.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[10.0.13, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[10.0.13, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
