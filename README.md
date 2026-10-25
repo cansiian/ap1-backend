@@ -1,76 +1,112 @@
 # API Álbuns do Radiohead
 
-API RESTful minimal desenvolvida em **C#** para o gerenciamento de álbuns da banda **Radiohead**.
+API RESTful desenvolvida em **C# com .NET 10**, utilizando **Entity Framework Core** e **SQLite** para o gerenciamento dos álbuns da banda Radiohead.
 
-O objetivo da aplicação é disponibilizar um CRUD simples para **consulta, cadastro, alteração e remoção** dos álbuns da banda mantidos na biblioteca.
+O projeto implementa operações CRUD (*Create, Read, Update e Delete*), permitindo consultar, cadastrar, atualizar e remover álbuns por meio de endpoints HTTP.
 
----
+## Tecnologias Utilizadas
 
-# Link do Video
+- **C#** — linguagem de programação.
+- **.NET 10** — plataforma de desenvolvimento.
+- **ASP.NET Core Minimal APIs** — criação dos endpoints REST.
+- **Entity Framework Core** — mapeamento objeto-relacional e acesso aos dados.
+- **SQLite** — banco de dados relacional.
+- **Bruno** — ferramenta para testes das requisições HTTP.
 
-https://drive.google.com/file/d/1VlkuHsi0UWj_k_LaQ3wICZZgfD7D88ub/view?usp=sharing
+## Vídeos do Projeto
 
----
+- [Vídeo AP1](https://drive.google.com/file/d/1VlkuHsi0UWj_k_LaQ3wICZZgfD7D88ub/view?usp=sharing)
+- [Vídeo AP2](https://drive.google.com/file/d/1hbZv-y5ZDE9FvZgv5vpQfCjR9tmKMQc-/view?usp=sharing)
 
 ## Requisitos
 
-* **.NET 10 SDK**
-
----
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
+- Pacotes NuGet do Entity Framework Core e do provedor SQLite configurados no projeto.
+- String de conexão `Padrao` configurada no arquivo `appsettings.json`.
 
 ## Como Executar o Projeto
 
-Abra o terminal na pasta raiz do projeto.
-
-Execute o comando abaixo para iniciar o servidor local:
+1. Clone o repositório e acesse a pasta raiz do projeto.
+2. Verifique se a string de conexão `Padrao` está configurada corretamente no `appsettings.json`.
+3. Confirme que o banco de dados SQLite e sua estrutura estão inicializados conforme a configuração do projeto.
+4. Execute a aplicação pelo terminal:
 
 ```bash
+dotnet restore
 dotnet run
 ```
 
----
-
-## URL Local para Testes
-
-Após iniciar a aplicação, a API estará disponível no seguinte endereço:
+A aplicação será iniciada na URL informada pelo terminal. Caso esteja configurada para utilizar a porta `5050`, o endereço local será:
 
 ```text
 http://localhost:5050
 ```
 
-> **Observação:** caso a porta configurada no seu ambiente seja diferente ao executar `dotnet run`, utilize a porta indicada no terminal para realizar os testes.
-
----
-
-## Armazenamento de Dados
-
-Os dados da aplicação são armazenados **apenas em memória**, dentro de uma lista interna (`List`).
-
-Por esse motivo, as alterações realizadas através dos métodos **POST**, **PUT** ou **DELETE** serão perdidas assim que o processo da aplicação for encerrado ou reiniciado.
-
----
+> **Observação:** a porta pode variar conforme as configurações de execução do projeto.
 
 ## Endpoints da API
 
-| Método   | Rota               | Descrição                                     | Status de Sucesso |
-| -------- | ------------------ | --------------------------------------------- | ----------------- |
-| `GET`    | `/`                | Informa que a API está no ar                  | `200 OK`          |
-| `GET`    | `/api/albuns`      | Lista todos os álbuns cadastrados             | `200 OK`          |
-| `GET`    | `/api/albuns/{id}` | Retorna os detalhes de um álbum pelo ID       | `200 OK`          |
-| `POST`   | `/api/albuns`      | Cadastra um novo álbum                        | `201 Created`     |
-| `PUT`    | `/api/albuns/{id}` | Atualiza as informações de um álbum existente | `200 OK`          |
-| `DELETE` | `/api/albuns/{id}` | Remove um álbum da lista pelo ID              | `204 No Content`  |
+| Método | Rota | Descrição | Sucesso |
+|---|---|---|---|
+| `GET` | `/api` | Verifica se a API está online | `200 OK` |
+| `GET` | `/api/albuns` | Lista todos os álbuns cadastrados | `200 OK` |
+| `GET` | `/api/albuns/{id}` | Busca um álbum pelo ID | `200 OK` |
+| `POST` | `/api/albuns` | Cadastra um novo álbum | `201 Created` |
+| `PUT` | `/api/albuns/{id}` | Atualiza um álbum existente | `200 OK` |
+| `DELETE` | `/api/albuns/{id}` | Remove um álbum existente | `204 No Content` |
 
----
+### Respostas de erro
 
-## Exemplos de Payloads JSON
+As operações de busca, atualização e remoção retornam `404 Not Found` quando o álbum solicitado não existe.
 
-### Requisição POST
+O retorno contém uma mensagem informando que o álbum com o ID especificado não foi encontrado.
 
-**Endpoint:**
+## Exemplos de Requisições
 
-```text
+### 1. Verificar o status da API
+
+**Requisição:**
+
+```http
+GET /api
+```
+
+**Resposta — `200 OK`:**
+
+```json
+{
+  "mensagem": "API de Álbuns do Radiohead no ar!",
+  "status": "Online"
+}
+```
+
+### 2. Listar álbuns
+
+**Requisição:**
+
+```http
+GET /api/albuns
+```
+
+Retorna uma lista com os álbuns cadastrados no banco de dados.
+
+### 3. Buscar álbum por ID
+
+**Requisição:**
+
+```http
+GET /api/albuns/1
+```
+
+Retorna os dados do álbum correspondente ao ID informado ou `404 Not Found` caso ele não exista.
+
+### 4. Cadastrar álbum
+
+**Requisição:**
+
+```http
 POST /api/albuns
+Content-Type: application/json
 ```
 
 **Payload:**
@@ -83,14 +119,15 @@ POST /api/albuns
 }
 ```
 
----
+**Resposta:** `201 Created`, contendo os dados do álbum criado, incluindo o ID gerado pelo banco de dados.
 
-### Requisição PUT
+### 5. Atualizar álbum
 
-**Endpoint:**
+**Requisição:**
 
-```text
-PUT /api/albuns/{id}
+```http
+PUT /api/albuns/1
+Content-Type: application/json
 ```
 
 **Payload:**
@@ -103,14 +140,26 @@ PUT /api/albuns/{id}
 }
 ```
 
----
+**Resposta:** `200 OK`, contendo os dados atualizados do álbum.
 
-## Collection de Testes
+Se o ID não existir, a API retornará `404 Not Found`.
 
-Os arquivos de requisição configurados para o **Bruno** estão disponíveis no repositório no seguinte diretório:
+### 6. Remover álbum
 
-/bruno
-/bruno
+**Requisição:**
+
+```http
+DELETE /api/albuns/1
 ```
 
-A collection pode ser utilizada para realizar os testes dos endpoints da API de forma prática.
+**Resposta:** `204 No Content` quando a remoção for concluída com sucesso.
+
+Se o álbum não existir, será retornado `404 Not Found`.
+
+## Banco de Dados
+
+A aplicação utiliza **SQLite** para armazenar os dados dos álbuns e **Entity Framework Core** para realizar as operações de consulta e persistência.
+
+Diferentemente de uma implementação que mantém os dados apenas em uma lista em memória, as alterações são gravadas no banco por meio de `SaveChangesAsync()`.
+
+Dessa forma, os registros podem permanecer disponíveis após o encerramento da aplicação
