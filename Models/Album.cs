@@ -1,3 +1,5 @@
+namespace ApiAlbuns.Models;
+
 public class Album
 {
     public int Id { get; set; }

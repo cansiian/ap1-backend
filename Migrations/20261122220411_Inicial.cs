@@ -7,7 +7,7 @@
 namespace ApiAlbuns.Migrations
 {
     /// <inheritdoc />
-    public partial class CriarTabelaAlbuns : Migration
+    public partial class Inicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

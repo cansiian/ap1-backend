@@ -1,3 +1,6 @@
+using ApiAlbuns.Data;
+using ApiAlbuns.Dtos;
+using ApiAlbuns.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -84,5 +87,3 @@ app.MapDelete("/api/albuns/{id:int}", async (int id, AppDbContext db) =>
 });
 
 app.Run();
-
-record AlbumEntradaDto(string Titulo, int AnoLancamento, int NumeroFaixas);
